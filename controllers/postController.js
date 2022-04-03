@@ -28,7 +28,13 @@ async function servePost(req, res) {
     const id = req.params.id;
     const postDoc = await Post.findOne({
         where: { id: id },
-        include: [ 'author', 'location' ]
+        include: [
+            {
+                model: Author,
+                as: 'author',
+                attributes: [ 'name', 'image' ]
+            },
+            'location']
     });
     return res.status(200).json(postDoc);
 }
