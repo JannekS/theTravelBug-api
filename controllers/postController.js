@@ -1,45 +1,36 @@
-const post = require("../db/post");
 const serverURL = process.env.BASE_URL;
+const Post = require('../models/post');
+const Author = require('../models/user');
 
-function servePreviews(req, res) {
-    post.getPostPreviews(function(result) {
-        
-        if (result) {
-
-            result.forEach(blogPost => {
-                blogPost.author_image = serverURL + blogPost.author_image;
-                blogPost.image = serverURL + blogPost.image;
-            });
-            
-            result.status = "Ok";
-
-            res.json(result);
-        } else {
-            res.json({status: "Failed" });
-        }
-
+async function servePreviews(req, res) {
+    const blogPosts = await Post.findAll({
+        include: [
+            {
+                model: Author,
+                as: 'author',
+                attributes: [ 'name', 'image' ]
+            },
+            'location']
     });
+
+    if (blogPosts) {
+        // TODO: Use path.join() instead
+        blogPosts.forEach(blogPost => {
+            blogPost.author.image = serverURL + blogPost.author.image;
+            blogPost.image = serverURL + blogPost.image;
+        });
+    }
+        
+    return res.status(200).json(blogPosts);
 }
 
-function servePost(req, res) {
+async function servePost(req, res) {
     const id = req.params.id;
-
-    post.getPostById(id, function(result) {
-        
-        // you could calculate the trip duartion here and add it as a property to the result
-
-        console.log(result);
-
-        if (result) {
-            result.status = "OK";
-            result.author_image = serverURL + result.author_image;
-            result.image = serverURL + result.image;
-            res.json(result);
-        } else {
-            
-            res.json({status: "Failed" });
-        }
+    const postDoc = await Post.findOne({
+        where: { id: id },
+        include: [ 'author', 'location' ]
     });
+    return res.status(200).json(postDoc);
 }
 
 module.exports = { servePreviews, servePost };
