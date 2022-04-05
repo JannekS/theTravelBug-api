@@ -36,6 +36,13 @@ async function servePost(req, res) {
             },
             'location']
     });
+
+    postDoc.author.image = serverURL + postDoc.author.image;
+    postDoc.image = serverURL + postDoc.image;
+
+    // TODO: Solve this problem in a more elegant way.
+    postDoc.text = postDoc.text.replaceAll("\\n", "\n");
+
     return res.status(200).json(postDoc);
 }
 
