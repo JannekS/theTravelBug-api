@@ -13,6 +13,8 @@ router.get("/new-post", isAuth, (req, res, next) => {
     res.json({ message: "You are now authenticated...", userId: req.userId });
 });
 
+router.post("/new-post", isAuth, postController.createPost); // TODO: Add validation here!!!
+
 router.put("/signup", validator.validateSignup, validator.errorHandler, authControler.signup);
 router.post("/login", validator.validateLogin, validator.errorHandler, authControler.login);
 

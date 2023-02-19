@@ -39,6 +39,14 @@ const Post = sequelize.define('post', {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    authorId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
+    locationId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    }
 });
 
 Post.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
