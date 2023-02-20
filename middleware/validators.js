@@ -53,7 +53,7 @@ exports.validateLogin = [
 exports.validateSignup = [
     check('name')
         .trim()
-        .isLength({min: 3}).withMessage('You must enter a username in oder to sign up. It should have at least 3 characters.'),
+        .isLength({min: 3}).withMessage('You must enter a username in order to sign up. It should have at least 3 characters.'),
     checkEmail('signup'),
     checkPassword('signup')
 ];

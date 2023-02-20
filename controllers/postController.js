@@ -48,34 +48,29 @@ async function servePost(req, res) {
 }
 
 async function createPost(req, res, next) {
-    // TODO: change this to handle multipart form data
-    const postCity = req.body.city;
-    const postCountry = req.body.country;
-    const postLat = req.body.lat;
-    const postLng = req.body.lng;
-
+    const imageUrl = req.file.path;
     const [postLocation, created] = await Location.findOrCreate({
-        where: { city: postCity, country: postCountry },
+        where: { city: req.body.location, country: req.body.country },
         defaults: {
-            city: postCity,
-            country: postCountry,
-            lat: postLat,
-            lng: postLng,
+            city: req.body.location,
+            country: req.body.country,
+            lat: req.body.lat,
+            lng: req.body.lng,
         }
     });
 
     try {
         const newPost = await Post.create({
             title: req.body.title,
-            dateFrom: req.body.dateFrom,
-            dateTo: req.body.dateTo,
-            image: req.body.image,
-            text: req.body.text,
-            tripDuration: req.body.duration,
-            authorId: req.body.userId,
+            dateFrom: req.body.startDate,
+            dateTo: req.body.endDate,
+            image: imageUrl,
+            text: req.body.mainText,
+            tripDuration: `${req.body.startDate} to ${req.body.endDate}`,
+            authorId: req.body.authorId,
             locationId: postLocation.id
         });
-        console.log("Test");
+        
         return res.json({ message: "Successfully created a new post!", title: newPost.title });
     }
     catch(err) {        // TODO: elaborate on this

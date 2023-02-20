@@ -1,4 +1,5 @@
 const express = require("express");
+
 const postController = require("./controllers/postController");
 const authControler = require('./controllers/auth');
 const isAuth = require('./middleware/is-auth.js');
