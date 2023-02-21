@@ -2,6 +2,7 @@ const serverURL = process.env.BASE_URL;
 const Post = require('../models/post');
 const Author = require('../models/user');
 const Location = require('../models/location');
+const path = require('path');
 
 async function servePreviews(req, res) {
     const blogPosts = await Post.findAll({
@@ -48,7 +49,7 @@ async function servePost(req, res) {
 }
 
 async function createPost(req, res, next) {
-    const imageUrl = req.file.path;
+    const imageUrl = path.join('/img/locations/', req.file.filename);
     const [postLocation, created] = await Location.findOrCreate({
         where: { city: req.body.location, country: req.body.country },
         defaults: {
