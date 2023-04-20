@@ -1,0 +1,8 @@
+DB_HOST="host"
+DB_PORT=1234
+DB_USER="db_user"
+DB_PASS="password"
+DB_NAME="db_name"
+PORT=1234
+BASE_URL=https://your.url
+TOKEN_SECRET="very_secret_token_for_encryption"
